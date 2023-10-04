@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <assert.h>
 #include "snappy.h"
 
 int main(int argc, char *argv[])
