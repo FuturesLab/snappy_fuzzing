@@ -1,0 +1,180 @@
+
+Input: crashes-2/05
+=================================================================
+==4032==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x00016bcdf298 at pc 0x00010413dffc bp 0x00016bcdde20 sp 0x00016bcdde18
+WRITE of size 1 at 0x00016bcdf298 thread T0
+    #0 0x10413dff8 in snappy::(anonymous namespace)::IncrementalCopySlow(char const*, char*, char*) snappy.cc:250
+    #1 0x10413dc04 in snappy::(anonymous namespace)::IncrementalCopy(char const*, char*, char*, char*) snappy.cc:521
+    #2 0x104145458 in void snappy::SnappyDecompressor::DecompressAllTags<snappy::SnappyArrayWriter>(snappy::SnappyArrayWriter*) snappy.cc:1481
+    #3 0x104133214 in bool snappy::InternalUncompressAllTags<snappy::SnappyArrayWriter>(snappy::SnappyDecompressor*, snappy::SnappyArrayWriter*, unsigned int, unsigned int) snappy.cc:1599
+    #4 0x1041305e4 in bool snappy::InternalUncompress<snappy::SnappyArrayWriter>(snappy::Source*, snappy::SnappyArrayWriter*) snappy.cc:1586
+    #5 0x1041301f4 in snappy::RawUncompress(snappy::Source*, char*) snappy.cc:2035
+    #6 0x10412ffcc in snappy::RawUncompress(char const*, unsigned long, char*) snappy.cc:2030
+    #7 0x104124320 in main+0x3c8 (harness-2:arm64+0x100004320) (BuildId: 07ce8b2055283a74a9a38d960ab28bfe32000000200000000100000000000d00)
+    #8 0x195d47f24  (<unknown module>)
+
+Address 0x00016bcdf298 is located in stack of thread T0 at offset 952 in frame
+    #0 0x104123f64 in main+0xc (harness-2:arm64+0x100003f64) (BuildId: 07ce8b2055283a74a9a38d960ab28bfe32000000200000000100000000000d00)
+
+  This frame has 5 object(s):
+    [32, 608) 'fuzz_file'
+    [736, 760) 'str_cur'
+    [800, 824) 'str_fin'
+    [864, 888) 'str_Compress'
+    [928, 952) 'str_Uncompress' <== Memory access at offset 952 overflows this variable
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: stack-buffer-overflow snappy.cc:250 in snappy::(anonymous namespace)::IncrementalCopySlow(char const*, char*, char*)
+Shadow bytes around the buggy address:
+  0x00702d7bbe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7bbe10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7bbe20: 00 00 00 00 00 00 00 00 f2 f2 f2 f2 f2 f2 f2 f2
+  0x00702d7bbe30: f2 f2 f2 f2 f2 f2 f2 f2 00 00 00 f2 f2 f2 f2 f2
+  0x00702d7bbe40: 00 00 00 f2 f2 f2 f2 f2 00 00 00 f2 f2 f2 f2 f2
+=>0x00702d7bbe50: 00 00 00[f3]f3 f3 f3 f3 00 00 00 00 00 00 00 00
+  0x00702d7bbe60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7bbe70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7bbe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7bbe90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7bbea0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==4032==ABORTING
+./asan.sh: line 3:  4032 Abort trap: 6           ./harness-2 crashes-2/$x
+
+Input: crashes-2/06
+=================================================================
+==4034==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x00016b0e7298 at pc 0x000105150f7c bp 0x00016b0e62e0 sp 0x00016b0e5aa0
+WRITE of size 10 at 0x00016b0e7298 thread T0
+    #0 0x105150f78 in __asan_memcpy+0x240 (libclang_rt.asan_osx_dynamic.dylib:arm64e+0x40f78) (BuildId: f0a7ac5c49bc3abc851181b6f92b308a32000000200000000100000000000b00)
+    #1 0x104d3de6c in snappy::SnappyArrayWriter::Append(char const*, unsigned long, char**) snappy.cc:1980
+    #2 0x104d3c95c in void snappy::SnappyDecompressor::DecompressAllTags<snappy::SnappyArrayWriter>(snappy::SnappyArrayWriter*) snappy.cc:1460
+    #3 0x104d2b214 in bool snappy::InternalUncompressAllTags<snappy::SnappyArrayWriter>(snappy::SnappyDecompressor*, snappy::SnappyArrayWriter*, unsigned int, unsigned int) snappy.cc:1599
+    #4 0x104d285e4 in bool snappy::InternalUncompress<snappy::SnappyArrayWriter>(snappy::Source*, snappy::SnappyArrayWriter*) snappy.cc:1586
+    #5 0x104d281f4 in snappy::RawUncompress(snappy::Source*, char*) snappy.cc:2035
+    #6 0x104d27fcc in snappy::RawUncompress(char const*, unsigned long, char*) snappy.cc:2030
+    #7 0x104d1c320 in main+0x3c8 (harness-2:arm64+0x100004320) (BuildId: 07ce8b2055283a74a9a38d960ab28bfe32000000200000000100000000000d00)
+    #8 0x195d47f24  (<unknown module>)
+
+Address 0x00016b0e7298 is located in stack of thread T0 at offset 952 in frame
+    #0 0x104d1bf64 in main+0xc (harness-2:arm64+0x100003f64) (BuildId: 07ce8b2055283a74a9a38d960ab28bfe32000000200000000100000000000d00)
+
+  This frame has 5 object(s):
+    [32, 608) 'fuzz_file'
+    [736, 760) 'str_cur'
+    [800, 824) 'str_fin'
+    [864, 888) 'str_Compress'
+    [928, 952) 'str_Uncompress' <== Memory access at offset 952 overflows this variable
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: stack-buffer-overflow (libclang_rt.asan_osx_dynamic.dylib:arm64e+0x40f78) (BuildId: f0a7ac5c49bc3abc851181b6f92b308a32000000200000000100000000000b00) in __asan_memcpy+0x240
+Shadow bytes around the buggy address:
+  0x00702d63ce00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d63ce10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d63ce20: 00 00 00 00 00 00 00 00 f2 f2 f2 f2 f2 f2 f2 f2
+  0x00702d63ce30: f2 f2 f2 f2 f2 f2 f2 f2 00 00 00 f2 f2 f2 f2 f2
+  0x00702d63ce40: 00 00 00 f2 f2 f2 f2 f2 00 00 00 f2 f2 f2 f2 f2
+=>0x00702d63ce50: 00 00 00[f3]f3 f3 f3 f3 00 00 00 00 00 00 00 00
+  0x00702d63ce60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d63ce70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d63ce80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d63ce90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d63cea0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==4034==ABORTING
+./asan.sh: line 3:  4034 Abort trap: 6           ./harness-2 crashes-2/$x
+
+Input: crashes-2/08
+=================================================================
+==4036==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x00016bd17298 at pc 0x000104105ffc bp 0x00016bd15e20 sp 0x00016bd15e18
+WRITE of size 1 at 0x00016bd17298 thread T0
+    #0 0x104105ff8 in snappy::(anonymous namespace)::IncrementalCopySlow(char const*, char*, char*) snappy.cc:250
+    #1 0x104105c04 in snappy::(anonymous namespace)::IncrementalCopy(char const*, char*, char*, char*) snappy.cc:521
+    #2 0x10410d458 in void snappy::SnappyDecompressor::DecompressAllTags<snappy::SnappyArrayWriter>(snappy::SnappyArrayWriter*) snappy.cc:1481
+    #3 0x1040fb214 in bool snappy::InternalUncompressAllTags<snappy::SnappyArrayWriter>(snappy::SnappyDecompressor*, snappy::SnappyArrayWriter*, unsigned int, unsigned int) snappy.cc:1599
+    #4 0x1040f85e4 in bool snappy::InternalUncompress<snappy::SnappyArrayWriter>(snappy::Source*, snappy::SnappyArrayWriter*) snappy.cc:1586
+    #5 0x1040f81f4 in snappy::RawUncompress(snappy::Source*, char*) snappy.cc:2035
+    #6 0x1040f7fcc in snappy::RawUncompress(char const*, unsigned long, char*) snappy.cc:2030
+    #7 0x1040ec320 in main+0x3c8 (harness-2:arm64+0x100004320) (BuildId: 07ce8b2055283a74a9a38d960ab28bfe32000000200000000100000000000d00)
+    #8 0x195d47f24  (<unknown module>)
+
+Address 0x00016bd17298 is located in stack of thread T0 at offset 952 in frame
+    #0 0x1040ebf64 in main+0xc (harness-2:arm64+0x100003f64) (BuildId: 07ce8b2055283a74a9a38d960ab28bfe32000000200000000100000000000d00)
+
+  This frame has 5 object(s):
+    [32, 608) 'fuzz_file'
+    [736, 760) 'str_cur'
+    [800, 824) 'str_fin'
+    [864, 888) 'str_Compress'
+    [928, 952) 'str_Uncompress' <== Memory access at offset 952 overflows this variable
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: stack-buffer-overflow snappy.cc:250 in snappy::(anonymous namespace)::IncrementalCopySlow(char const*, char*, char*)
+Shadow bytes around the buggy address:
+  0x00702d7c2e00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7c2e10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7c2e20: 00 00 00 00 00 00 00 00 f2 f2 f2 f2 f2 f2 f2 f2
+  0x00702d7c2e30: f2 f2 f2 f2 f2 f2 f2 f2 00 00 00 f2 f2 f2 f2 f2
+  0x00702d7c2e40: 00 00 00 f2 f2 f2 f2 f2 00 00 00 f2 f2 f2 f2 f2
+=>0x00702d7c2e50: 00 00 00[f3]f3 f3 f3 f3 00 00 00 00 00 00 00 00
+  0x00702d7c2e60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7c2e70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7c2e80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7c2e90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00702d7c2ea0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==4036==ABORTING
+./asan.sh: line 3:  4036 Abort trap: 6           ./harness-2 crashes-2/$x
